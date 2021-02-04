@@ -1,0 +1,70 @@
+{
+  "name": "darkeditor",
+  "productName": "darkeditor",
+  "version": "1.0.0",
+  "description": "An Image Editor made with Electron!",
+  "main": "src/index.js",
+  "build": {
+    "appId": "darkeditor",
+    "productName": "Dark Editor Beta Testing",
+    "nsis": {
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "dist": "build"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Chinmay",
+    "email": "darkequinox564@gmail.com"
+  },
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "darkeditor"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "electron-screenshot": "^1.0.5",
+    "electron-screenshot-service": "^4.0.3",
+    "electron-squirrel-startup": "^1.0.0",
+    "fs": "0.0.1-security",
+    "image-size": "^0.9.3"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.54",
+    "@electron-forge/maker-deb": "^6.0.0-beta.54",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
+    "@electron-forge/maker-zip": "^6.0.0-beta.54",
+    "electron": "11.2.1",
+    "electron-builder": "^22.9.1"
+  }
+}
