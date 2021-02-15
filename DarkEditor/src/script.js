@@ -1,10 +1,9 @@
-const app = angular.module('app', ['ngRoute']);
+const app1 = angular.module('app', ['ngRoute']);
 const {remote} = require('electron');
-const { dirname } = require('path');
 const url = require('url');
 
 
-app.service('image',function(){
+app1.service('image',function(){
     var imagePath = "";
     var dimesions = [];
     this.setImagePath = (path) => {
@@ -21,7 +20,7 @@ app.service('image',function(){
 	};
 });
 
-app.config(function($routeProvider){
+app1.config(function($routeProvider){
     $routeProvider.when('/',{
         templateUrl: `${__dirname}/components/home/home.html`,
         controller: 'homeCtrl'
@@ -33,11 +32,11 @@ app.config(function($routeProvider){
     });
 });
 
-app.controller('headCtrl', function($scope){
+app1.controller('headCtrl', function($scope){
     const win = remote.getCurrentWindow();
 
     $scope.close = () => {
-        win.close();
+        app.quit();
     };
     $scope.maximize = () => {
         win.isMaximized() ? win.unmaximize() : win.maximize();
@@ -47,7 +46,7 @@ app.controller('headCtrl', function($scope){
     };
 });
 
-app.controller('homeCtrl', function($scope, $location, image){
+app1.controller('homeCtrl', function($scope, $location, image){
     $scope.pickFile = () => {
         var {dialog} = remote;
         dialog.showOpenDialog({
@@ -70,7 +69,7 @@ app.controller('homeCtrl', function($scope, $location, image){
     };
 });
 
-app.controller('editCtrl',function($scope, image, $location){
+app1.controller('editCtrl',function($scope, image, $location){
     $scope.ImagePath = image.getImagePath();
     $scope.controlsActive = false;
     var generatedStyles = "";
@@ -128,18 +127,42 @@ app.controller('editCtrl',function($scope, image, $location){
                 enableRemoteModule: true
 			}
         });
+
                 
 		win.loadURL(`data:text/html,
 			<style>*{margin:0;padding:0;}</style><img src="${src}" style="filter: ${styles}">
 			
             <script>
             const {remote} = require('electron');
-            remote.getCurrentWindow().capturePage(image => {
+            const win = remote.getCurrentWindow(); 
+            const fs = require('fs');
+            const dialog = remote.dialog;
 
-                fs.writeFile('./test.png', image.toPNG(), (err) => {
-                    if (err) throw err;
-                });
-            });
+            let savePath = "";
+
+            setTimeout(async () => {
+                
+                let img2 = await win.capturePage();
+
+                dialog.showSaveDialog({
+                    title: "Select The Path",
+                    defaultPath: "newFile.png",
+                    filters: [{
+                        name: "Images",
+                        extensions: ['png'] 
+                    }]
+                }).then(result => {
+                    var path = result.filePath;
+                    fs.writeFile(path.toString(), img2.toPNG(), function (err) {
+                        if (err) throw err;
+                    });
+                    
+                });         
+                fs.close(1);
+
+                win.close();
+                
+            }, 1000);         
 			</script>
 		
         `);
