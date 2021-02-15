@@ -2,7 +2,7 @@ const { app, BrowserWindow, protocol } = require('electron');
 const path = require('path');
 const url = require('url');
 
-
+app.disableHardwareAcceleration();
 
 app.on('ready', async () => {
   // Name the protocol whatever you want
